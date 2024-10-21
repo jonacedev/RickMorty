@@ -1,0 +1,27 @@
+
+
+
+// General
+
+"general_ok" = "Ok";
+"general_accept" = "Accept";
+"general_cancel" = "Cancel";
+
+
+// Error
+
+"error_generic" = "An error has occurred";
+"error_not_found" = "No results found";
+
+
+// SearchBar
+
+"placeholder_searchbar" = "Search";
+
+
+// DetailView
+
+"character_episodes_title" = "Appeared in %d episodes:";
+"character_origin_title" = "Origin: ";
+"character_location_title" = "Last Known Location: ";
+"character_unknown_placeholder" = "Unknown";
