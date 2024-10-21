@@ -15,7 +15,10 @@ struct RickMortyApp: App {
     var body: some Scene {
         WindowGroup {
             if splashFinished {
-                HomeWireframe().build()
+                NavigationStack {
+                    CharactersListWireframe().build()
+                }
+                .tint(.black)
             } else {
                 SplashView(splashFinished: $splashFinished)
             }

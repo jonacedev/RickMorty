@@ -7,21 +7,18 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct CharacterListView: View {
     
-    @State var vm: HomeViewModel
+    @State var vm: CharacterListViewModel
     @Namespace var namespace
     
     var columns: [GridItem] = [GridItem(.adaptive(minimum: 160))]
     
     var body: some View {
-        NavigationStack {
-            BaseView(content: content, vm: vm)
-                .task {
-                    await vm.fetchCharacters()
-                }
-        }
-        .tint(.black)
+        BaseView(content: content, vm: vm)
+            .task {
+                await vm.fetchCharacters()
+            }
     }
     
     @ViewBuilder private func content() -> some View {
@@ -71,11 +68,11 @@ struct HomeView: View {
     
     @ViewBuilder private func destinationView(for character: CharacterModel) -> some View {
         if #available(iOS 18.0, *) {
-            DetailWireframe(characterModel: character)
+            CharacterDetailWireframe(characterModel: character)
                 .build()
                 .navigationTransition(.zoom(sourceID: character.id, in: namespace))
         } else {
-            DetailWireframe(characterModel: character)
+            CharacterDetailWireframe(characterModel: character)
                 .build()
         }
     }
@@ -101,5 +98,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeWireframe().preview()
+    CharactersListWireframe().preview()
 }

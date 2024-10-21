@@ -8,9 +8,9 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct DetailView: View {
+struct CharacterDetailView: View {
     
-    @State var vm: DetailViewModel
+    @State var vm: CharacterDetailViewModel
     let model: CharacterModel
     
     var body: some View {
@@ -125,5 +125,5 @@ struct DetailView: View {
 }
 
 #Preview {
-    DetailWireframe(characterModel: CharacterModel.mock).preview()
+    CharacterDetailWireframe(characterModel: CharacterModel.mock).preview()
 }

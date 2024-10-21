@@ -8,16 +8,16 @@
 import SwiftUI
 
 @Observable
-class HomeViewModel: BaseViewModel {
+class CharacterListViewModel: BaseViewModel {
     
-    @ObservationIgnored private var useCase: HomeUseCaseProtocol
+    @ObservationIgnored private var useCase: CharacterListUseCaseProtocol
     @ObservationIgnored private var currentPage = 1
     @ObservationIgnored private var hasMorePages = true
     
     var characters: [CharacterModel] = []
     var searchText: String = ""
     
-    init(useCase: HomeUseCaseProtocol) {
+    init(useCase: CharacterListUseCaseProtocol) {
         self.useCase = useCase
     }
     

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class DetailWireframe {
+class CharacterDetailWireframe {
     
     let characterModel: CharacterModel
     
@@ -15,9 +15,9 @@ class DetailWireframe {
         self.characterModel = characterModel
     }
     
-    func build() -> DetailView {
-        let viewModel: DetailViewModel = DetailViewModel()
-        return DetailView(vm: viewModel, model: characterModel)
+    func build() -> CharacterDetailView {
+        let viewModel: CharacterDetailViewModel = CharacterDetailViewModel()
+        return CharacterDetailView(vm: viewModel, model: characterModel)
     }
     
     func preview() -> some View {

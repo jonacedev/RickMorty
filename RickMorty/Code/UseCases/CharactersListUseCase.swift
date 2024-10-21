@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol HomeUseCaseProtocol {
+protocol CharacterListUseCaseProtocol {
     func fetchCharacters(page: Int) async throws -> CharactersResponse?
     func searchCharacters(text: String) async throws -> CharactersResponse
 }
 
-class HomeUseCase {
+class CharacterListUseCase {
     
     // MARK: - Properties
     
@@ -25,7 +25,7 @@ class HomeUseCase {
     }
 }
 
-extension HomeUseCase: HomeUseCaseProtocol {
+extension CharacterListUseCase: CharacterListUseCaseProtocol {
     func fetchCharacters(page: Int) async throws -> CharactersResponse? {
         try await apiClient.fetchCharacters(page: page)
     }
