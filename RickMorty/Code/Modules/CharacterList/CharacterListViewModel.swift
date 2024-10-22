@@ -10,15 +10,17 @@ import SwiftUI
 @Observable
 class CharacterListViewModel: BaseViewModel {
     
-    @ObservationIgnored private var useCase: CharacterListUseCaseProtocol
+    @ObservationIgnored private var fetchUseCase: GetCharacterListUseCaseProtocol
+    @ObservationIgnored private var searchUseCase: CharacterSearchUseCaseProtocol
     @ObservationIgnored private var currentPage = 1
     @ObservationIgnored private var hasMorePages = true
     
     var characters: [CharacterModel] = []
     var searchText: String = ""
     
-    init(useCase: CharacterListUseCaseProtocol) {
-        self.useCase = useCase
+    init(fetchUseCase: GetCharacterListUseCaseProtocol, searchUseCase: CharacterSearchUseCaseProtocol) {
+        self.fetchUseCase = fetchUseCase
+        self.searchUseCase = searchUseCase
     }
     
     @MainActor
@@ -27,7 +29,7 @@ class CharacterListViewModel: BaseViewModel {
         isLoading = true
         
         do {
-            let response = try await useCase.fetchCharacters(page: currentPage)
+            let response = try await fetchUseCase.fetchCharacters(page: currentPage)
             let newCharacters = response.characters
             characters.append(contentsOf: newCharacters)
             hasMorePages = (response.next != nil)
@@ -53,7 +55,7 @@ class CharacterListViewModel: BaseViewModel {
     private func performSearch() async {
         isLoading = true
         do {
-            let response = try await useCase.searchCharacters(text: searchText)
+            let response = try await searchUseCase.searchCharacters(text: searchText)
             characters = response.characters
             notFound = false
             isLoading = false

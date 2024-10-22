@@ -1,16 +1,16 @@
 //
-//  RickMortyTests.swift
+//  CharacterSearchUseCaseTests.swift
 //  RickMortyTests
 //
-//  Created by Jonathan Miguel Onrubia Solis on 19/10/24.
+//  Created by Jonathan Miguel Onrubia Solis on 22/10/24.
 //
 
 import XCTest
 @testable import RickMorty
 
-final class CharacterListUseCaseTests: XCTestCase {
+final class CharacterSearchUseCaseTests: XCTestCase {
     
-    var useCase: GetCharacterListUseCase!
+    var useCase: CharacterSearchUseCase!
     
     override func setUp() {
         super.setUp()
@@ -22,10 +22,10 @@ final class CharacterListUseCaseTests: XCTestCase {
         super.tearDown()
     }
     
-    func testFetchCharactersSuccess() async throws {
+    func testSearchCharacterSuccess() async throws {
         // Arrange
         useCase = .init(
-            GetCharacterListUseCase(
+            CharacterSearchUseCase(
                 repository: CharacterRepository(
                     apiClient: NetworkMockSuccess(),
                     mapper: MockCharacterDomainMapper()
@@ -35,21 +35,22 @@ final class CharacterListUseCaseTests: XCTestCase {
         
         do {
             // Act
-            let result = try await useCase.fetchCharacters(page: 1)
+            let searchText = "Rick Sanchez"
+            let result = try await useCase.searchCharacters(text: searchText)
             let characters = result.characters
             
             // Assert
             XCTAssertFalse(characters.isEmpty, "Expected non-empty character list")
-            XCTAssertEqual(1, characters.first?.id, "First id should be 1")
+            XCTAssertTrue(characters.contains(where: { $0.name == searchText }))
         } catch {
             XCTFail("Expected success, but got error: \(error.localizedDescription)")
         }
     }
     
-    func testFetchCharactersFailed() async throws {
+    func testSearchCharacterReturnsNotFound() async {
         // Arrange
         useCase = .init(
-            GetCharacterListUseCase(
+            CharacterSearchUseCase(
                 repository: CharacterRepository(
                     apiClient: NetworkMockFailed(),
                     mapper: MockCharacterDomainMapper()
@@ -59,13 +60,16 @@ final class CharacterListUseCaseTests: XCTestCase {
         
         do {
             // Act
-            _ = try await useCase.fetchCharacters(page: 1)
+            let searchText = "Rick Sanchez"
+            _ = try await useCase.searchCharacters(text: searchText)
             XCTFail("Expected failure, but succeeded")
         } catch {
             if let baseError = error as? BaseError {
                 switch baseError {
-                case .generic, .notFound, .apiError:
+                case .notFound:
                     XCTAssertTrue(true)
+                default:
+                    XCTFail("Expected not found error")
                 }
             } else {
                 XCTFail("Expected Base Error")
@@ -73,3 +77,4 @@ final class CharacterListUseCaseTests: XCTestCase {
         }
     }
 }
+

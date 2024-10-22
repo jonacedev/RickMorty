@@ -17,7 +17,9 @@ struct CharacterListView: View {
     var body: some View {
         BaseView(content: content, vm: vm)
             .task {
-                await vm.fetchCharacters()
+                if vm.characters.isEmpty {
+                    await vm.fetchCharacters()
+                }
             }
     }
     
@@ -46,6 +48,7 @@ struct CharacterListView: View {
                 await vm.resetCharacters()
             }
             .redacted(reason: vm.isLoading ? .placeholder: [])
+            .scrollDismissesKeyboard(.interactively)
         }
         .padding(.top, 20)
     }

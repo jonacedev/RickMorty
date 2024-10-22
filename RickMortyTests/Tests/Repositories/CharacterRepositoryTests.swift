@@ -28,7 +28,7 @@ final class CharacterRepositoryTests: XCTestCase {
         repository = .init(
             CharacterRepository(
                 apiClient: NetworkMockSuccess(),
-                mapper: CharacterDomainMapper()
+                mapper: MockCharacterDomainMapper()
             )
         )
         
@@ -53,7 +53,7 @@ final class CharacterRepositoryTests: XCTestCase {
         repository = .init(
             CharacterRepository(
                 apiClient: NetworkMockFailed(),
-                mapper: CharacterDomainMapper()
+                mapper: MockCharacterDomainMapper()
             )
         )
         
@@ -78,7 +78,7 @@ final class CharacterRepositoryTests: XCTestCase {
         repository = .init(
             CharacterRepository(
                 apiClient: NetworkMockSuccess(),
-                mapper: CharacterDomainMapper()
+                mapper: MockCharacterDomainMapper()
             )
         )
        
@@ -101,7 +101,7 @@ final class CharacterRepositoryTests: XCTestCase {
         repository = .init(
             CharacterRepository(
                 apiClient: NetworkMockFailed(),
-                mapper: CharacterDomainMapper()
+                mapper: MockCharacterDomainMapper()
             )
         )
         

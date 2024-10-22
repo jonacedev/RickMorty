@@ -22,17 +22,11 @@ class CharacterListViewModelTests: XCTestCase {
         vm = nil
         super.tearDown()
     }
-    
+        
     func testLoadCharactersHideLoader() {
         // Arrange
-        vm = .init(
-            useCase: CharacterListUseCase(
-                repository: CharacterRepository(
-                    apiClient: NetworkMockSuccess(),
-                    mapper: CharacterDomainMapper()
-                )
-            )
-        )
+        let mockApiClient = NetworkMockSuccess()
+        vm = setViewModel(apiClient: mockApiClient)
         
         // Act
         Task {
@@ -46,27 +40,18 @@ class CharacterListViewModelTests: XCTestCase {
     
     func testLoadCharactersUpdatesUIWhenLoadingFinish() {
         // Arrange
-        vm = .init(
-            useCase: CharacterListUseCase(
-                repository: CharacterRepository(
-                    apiClient: NetworkMockSuccess(),
-                    mapper: CharacterDomainMapper()
-                )
-            )
-        )
+        let mockApiClient = NetworkMockSuccess()
+        vm = setViewModel(apiClient: mockApiClient)
         
         // Act
         let exp = expectation(description: "wait for completion")
         
         Task {
             await vm.fetchCharacters()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             exp.fulfill()
         }
         
-        wait(for: [exp], timeout: 5)
+        wait(for: [exp], timeout: 3)
         
         // Assert
         XCTAssertFalse(vm.isLoading)
@@ -76,23 +61,14 @@ class CharacterListViewModelTests: XCTestCase {
     
     func testLoadCharactersFailure() {
         // Arrange
-        vm = .init(
-            useCase: CharacterListUseCase(
-                repository: CharacterRepository(
-                    apiClient: NetworkMockFailed(),
-                    mapper: CharacterDomainMapper()
-                )
-            )
-        )
+        let mockApiClient = NetworkMockFailed()
+        vm = setViewModel(apiClient: mockApiClient)
         
         // Act
         let exp = expectation(description: "wait for completion")
         
         Task {
             await vm.fetchCharacters()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             exp.fulfill()
         }
         
@@ -102,5 +78,21 @@ class CharacterListViewModelTests: XCTestCase {
         XCTAssertNotNil(vm.errorAlert)
         XCTAssertFalse(vm.isLoading)
         XCTAssertEqual(vm.characters.count, 0)
+    }
+    
+    private func setViewModel(apiClient: APIClientProtocol) -> CharacterListViewModel {
+        return CharacterListViewModel(
+            fetchUseCase: GetCharacterListUseCase(
+                repository: CharacterRepository(
+                    apiClient: apiClient,
+                    mapper: MockCharacterDomainMapper()
+                )
+            ), searchUseCase: CharacterSearchUseCase(
+                repository: CharacterRepository(
+                    apiClient: apiClient,
+                    mapper: MockCharacterDomainMapper()
+                )
+            )
+        )
     }
 }

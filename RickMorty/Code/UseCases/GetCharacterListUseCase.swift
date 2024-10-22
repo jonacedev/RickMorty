@@ -7,12 +7,11 @@
 
 import Foundation
 
-protocol CharacterListUseCaseProtocol {
+protocol GetCharacterListUseCaseProtocol {
     func fetchCharacters(page: Int) async throws -> CharactersResponse
-    func searchCharacters(text: String) async throws -> CharactersResponse
 }
 
-class CharacterListUseCase {
+class GetCharacterListUseCase {
     
     // MARK: - Properties
     
@@ -25,12 +24,8 @@ class CharacterListUseCase {
     }
 }
 
-extension CharacterListUseCase: CharacterListUseCaseProtocol {
+extension GetCharacterListUseCase: GetCharacterListUseCaseProtocol {
     func fetchCharacters(page: Int) async throws -> CharactersResponse {
         try await repository.fetchCharacters(page: page)
-    }
-    
-    func searchCharacters(text: String) async throws -> CharactersResponse {
-        try await repository.searchCharacters(text: text)
     }
 }

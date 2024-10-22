@@ -10,13 +10,11 @@ import Foundation
 
 final class NetworkMockSuccess: APIClientProtocol {
     func fetchCharacters(page: Int) async throws -> CharactersResponseDTO {
-        let data = CharacterListMock.jsonDataResponse()
-        return try JSONDecoder().decode(CharactersResponseDTO.self, from: data)
+        CharactersMock.mockCharactersResponseDTO()
     }
     
     func searchCharacters(text: String) async throws -> CharactersResponseDTO {
-        let data = CharacterListMock.jsonSearchDataResponse()
-        return try JSONDecoder().decode(CharactersResponseDTO.self, from: data)
+        CharactersMock.mockSearchCharactersResponseDTO()
     }
 }
 

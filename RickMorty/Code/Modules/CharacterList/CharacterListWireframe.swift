@@ -10,9 +10,11 @@ import SwiftUI
 class CharactersListWireframe {
     
     func build() -> CharacterListView {
-        let repository: CharacterRepositoryProtocol = CharacterRepository(apiClient: apiClient, mapper: mapper)
-        let useCase: CharacterListUseCaseProtocol = CharacterListUseCase(repository: repository)
-        let viewModel: CharacterListViewModel = CharacterListViewModel(useCase: useCase)
+        let repository = CharacterRepository(apiClient: apiClient, mapper: mapper)
+        let fetchUseCase = GetCharacterListUseCase(repository: repository)
+        let searchUseCase = CharacterSearchUseCase(repository: repository)
+        
+        let viewModel: CharacterListViewModel = CharacterListViewModel(fetchUseCase: fetchUseCase, searchUseCase: searchUseCase)
         return CharacterListView(vm: viewModel)
     }
     
