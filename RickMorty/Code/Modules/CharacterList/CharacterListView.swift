@@ -45,7 +45,7 @@ struct CharacterListView: View {
             .refreshable {
                 await vm.resetCharacters()
             }
-            .redacted(reason: vm.loading ? .placeholder: [])
+            .redacted(reason: vm.isLoading ? .placeholder: [])
         }
         .padding(.top, 20)
     }

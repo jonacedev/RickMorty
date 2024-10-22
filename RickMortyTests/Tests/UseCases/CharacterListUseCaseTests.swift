@@ -24,13 +24,19 @@ final class CharacterListUseCaseTests: XCTestCase {
     
     func testFetchCharactersSuccess() async throws {
         // Arrange
-        let mockAPIClient = NetworkMockSuccess()
-        useCase = CharacterListUseCase(apiClient: mockAPIClient)
+        useCase = .init(
+            CharacterListUseCase(
+                repository: CharacterRepository(
+                    apiClient: NetworkMockSuccess(),
+                    mapper: CharacterDomainMapper()
+                )
+            )
+        )
         
         do {
             // Act
             let result = try await useCase.fetchCharacters(page: 1)
-            let characters = result.results
+            let characters = result.characters
             
             // Assert
             XCTAssertFalse(characters.isEmpty, "Expected non-empty character list")
@@ -40,32 +46,19 @@ final class CharacterListUseCaseTests: XCTestCase {
         }
     }
     
-    func testSearchCharacterSuccess() async throws {
+    func testFetchCharactersFailed() async throws {
         // Arrange
-        let mockAPIClient = NetworkMockSuccess()
-        useCase = CharacterListUseCase(apiClient: mockAPIClient)
-        let searchText = "Rick Sanchez"
+        useCase = .init(
+            CharacterListUseCase(
+                repository: CharacterRepository(
+                    apiClient: NetworkMockFailed(),
+                    mapper: CharacterDomainMapper()
+                )
+            )
+        )
         
         do {
             // Act
-            let result = try await useCase.searchCharacters(text: searchText)
-            let characters = result.results
-            
-            // Assert
-            XCTAssertFalse(characters.isEmpty, "Expected non-empty character list")
-            XCTAssertTrue(characters.contains(where: { $0.name == searchText }))
-        } catch {
-            XCTFail("Expected success, but got error: \(error.localizedDescription)")
-        }
-    }
-    
-    func testFetchCharactersFailure() async throws {
-        // Arrange
-        let mockAPIClient = NetworkMockFailed()
-        useCase = CharacterListUseCase(apiClient: mockAPIClient)
-        
-        // Act
-        do {
             _ = try await useCase.fetchCharacters(page: 1)
             XCTFail("Expected failure, but succeeded")
         } catch {
@@ -80,15 +73,45 @@ final class CharacterListUseCaseTests: XCTestCase {
         }
     }
     
-    func testSearchCharacterReturnsNotFound() async {
-        
+    func testSearchCharacterSuccess() async throws {
         // Arrange
-        let mockAPIClient = NetworkMockFailed()
-        let useCase = CharacterListUseCase(apiClient: mockAPIClient)
-        let searchText = "Rick Sanchez"
+        useCase = .init(
+            CharacterListUseCase(
+                repository: CharacterRepository(
+                    apiClient: NetworkMockSuccess(),
+                    mapper: CharacterDomainMapper()
+                )
+            )
+        )
         
-        // Act
         do {
+            // Act
+            let searchText = "Rick Sanchez"
+            let result = try await useCase.searchCharacters(text: searchText)
+            let characters = result.characters
+            
+            // Assert
+            XCTAssertFalse(characters.isEmpty, "Expected non-empty character list")
+            XCTAssertTrue(characters.contains(where: { $0.name == searchText }))
+        } catch {
+            XCTFail("Expected success, but got error: \(error.localizedDescription)")
+        }
+    }
+    
+    func testSearchCharacterReturnsNotFound() async {
+        // Arrange
+        useCase = .init(
+            CharacterListUseCase(
+                repository: CharacterRepository(
+                    apiClient: NetworkMockFailed(),
+                    mapper: CharacterDomainMapper()
+                )
+            )
+        )
+        
+        do {
+            // Act
+            let searchText = "Rick Sanchez"
             _ = try await useCase.searchCharacters(text: searchText)
             XCTFail("Expected failure, but succeeded")
         } catch {

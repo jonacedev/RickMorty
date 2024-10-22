@@ -12,12 +12,12 @@ class BaseViewModel {
     
     // MARK: - Properties
     
-    var loading: Bool = false
+    var isLoading: Bool = false
     var notFound: Bool = false
     var errorAlert: AlertModel?
     
     @MainActor func showAlert(error: AlertModel) {
-        loading = false
+        isLoading = false
         errorAlert = error
     }
     
@@ -26,7 +26,7 @@ class BaseViewModel {
     }
     
     @MainActor func handleError(_ error: Error) {
-        loading = false
+        isLoading = false
         notFound = false
         
         if let baseError = error as? BaseError {

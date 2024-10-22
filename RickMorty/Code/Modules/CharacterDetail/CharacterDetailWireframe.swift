@@ -17,7 +17,8 @@ class CharacterDetailWireframe {
     
     func build() -> CharacterDetailView {
         let viewModel: CharacterDetailViewModel = CharacterDetailViewModel()
-        return CharacterDetailView(vm: viewModel, model: characterModel)
+        let characterDetailItem = CharacterDetailItem(character: characterModel)
+        return CharacterDetailView(vm: viewModel, character: characterDetailItem)
     }
     
     func preview() -> some View {

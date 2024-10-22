@@ -21,9 +21,10 @@ class CharacterListViewModel: BaseViewModel {
         self.useCase = useCase
     }
     
-    @MainActor func fetchCharacters() async {
-        guard !loading && hasMorePages else { return }
-        loading = true
+    @MainActor
+    func fetchCharacters() async {
+        guard !isLoading && hasMorePages else { return }
+        isLoading = true
         
         do {
             let response = try await useCase.fetchCharacters(page: currentPage)
@@ -31,11 +32,34 @@ class CharacterListViewModel: BaseViewModel {
             characters.append(contentsOf: newCharacters)
             hasMorePages = (response.next != nil)
             currentPage += 1
-            loading = false
+            isLoading = false
         } catch {
             handleError(error)
         }
         
+    }
+    
+    @MainActor
+    func resetCharacters() async {
+        characters.removeAll()
+        currentPage = 1
+        hasMorePages = true
+        notFound = false
+        searchText = ""
+        await fetchCharacters()
+    }
+    
+    @MainActor
+    private func performSearch() async {
+        isLoading = true
+        do {
+            let response = try await useCase.searchCharacters(text: searchText)
+            characters = response.characters
+            notFound = false
+            isLoading = false
+        } catch {
+            handleError(error)
+        }
     }
     
     func checkSearch() async {
@@ -45,28 +69,7 @@ class CharacterListViewModel: BaseViewModel {
         }
         await performSearch()
     }
-    
-    @MainActor private func performSearch() async {
-        loading = true
-        do {
-            let response = try await useCase.searchCharacters(text: searchText)
-            characters = response.characters
-            notFound = false
-            loading = false
-        } catch {
-            handleError(error)
-        }
-    }
-    
-    @MainActor func resetCharacters() async {
-        characters.removeAll()
-        currentPage = 1
-        hasMorePages = true
-        notFound = false
-        searchText = ""
-        await fetchCharacters()
-    }
-    
+
     func hasReachedEnd(id: Int) -> Bool {
         characters.last?.id == id
     }

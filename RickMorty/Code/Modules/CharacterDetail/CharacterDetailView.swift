@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 struct CharacterDetailView: View {
     
     @State var vm: CharacterDetailViewModel
-    let model: CharacterModel
+    let character: CharacterDetailItem
     
     var body: some View {
         BaseView(content: content, vm: vm)
@@ -42,7 +42,7 @@ struct CharacterDetailView: View {
     }
     
     @ViewBuilder private func vwImage() -> some View {
-        WebImage(url: URL(string: model.imageURL ?? ""), options: .retryFailed) { image in
+        WebImage(url: character.imageURL, options: .retryFailed) { image in
             image.resizable()
         } placeholder: {
             Rectangle().foregroundColor(.gray)
@@ -53,7 +53,7 @@ struct CharacterDetailView: View {
     }
     
     @ViewBuilder private func vwName() -> some View {
-        Text(model.name ?? "")
+        Text(character.name)
             .font(.largeTitle)
             .bold()
             .lineLimit(2)
@@ -62,24 +62,21 @@ struct CharacterDetailView: View {
     
     @ViewBuilder private func vwInfoChips() -> some View {
         HStack {
-            // Gender
-            Label(model.gender?.rawValue.capitalized ?? "", systemImage: "person")
+            Label(character.gender, systemImage: "person")
                 .padding(8)
                 .fontWeight(.semibold)
                 .background(Color.blue.opacity(0.7))
                 .foregroundColor(.white)
                 .cornerRadius(10)
             
-            // Status (Alive, Dead, Unknown)
-            Text(model.status?.rawValue.capitalized ?? "character_unknown_placeholder".localized)
+            Text(character.aliveStatus)
                 .padding(8)
                 .fontWeight(.semibold)
-                .background(model.status == .alive ? Color.green : Color.red)
+                .background(character.statusColor)
                 .foregroundColor(.white)
                 .cornerRadius(10)
             
-            // Specie
-            Text(model.specie ?? "character_unknown_placeholder".localized)
+            Text(character.specie)
                 .padding(8)
                 .fontWeight(.semibold)
                 .background(Color.gray.opacity(0.7))
@@ -93,27 +90,27 @@ struct CharacterDetailView: View {
             HStack(alignment: .top, spacing: 5) {
                 Text("character_origin_title".localized)
                     .bold()
-                Text(model.origin?.name ?? "character_unknown_placeholder".localized)
+                Text(character.origin)
                     .foregroundColor(.secondary)
             }
             
             HStack(alignment: .top, spacing: 5) {
                 Text("character_location_title".localized)
                     .bold()
-                Text(model.location?.name ?? "character_unknown_placeholder".localized)
+                Text(character.location)
                     .foregroundColor(.secondary)
             }
         }
     }
     
     @ViewBuilder private func vwInfoEpisodes() -> some View {
-        Text(String(format: NSLocalizedString("character_episodes_title", comment: ""), model.episodes?.count ?? 0))
+        Text(String(format: NSLocalizedString("character_episodes_title", comment: ""), character.episodes.count))
             .font(.headline)
             .frame(maxWidth: .infinity, alignment: .leading)
         
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                ForEach(model.episodes ?? [], id: \.self) { episodeUrl in
+                ForEach(character.episodes, id: \.self) { episodeUrl in
                     Text(episodeUrl.components(separatedBy: "/").last ?? "")
                         .padding(10)
                         .background(Color.cyan.opacity(0.7))
