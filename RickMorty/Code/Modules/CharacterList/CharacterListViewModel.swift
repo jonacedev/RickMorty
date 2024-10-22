@@ -27,10 +27,9 @@ class CharacterListViewModel: BaseViewModel {
         
         do {
             let response = try await useCase.fetchCharacters(page: currentPage)
-            if let newCharacters = response?.results {
-                characters.append(contentsOf: newCharacters)
-            }
-            hasMorePages = (response?.info.next != nil)
+            let newCharacters = response.characters
+            characters.append(contentsOf: newCharacters)
+            hasMorePages = (response.next != nil)
             currentPage += 1
             loading = false
         } catch {
@@ -51,7 +50,7 @@ class CharacterListViewModel: BaseViewModel {
         loading = true
         do {
             let response = try await useCase.searchCharacters(text: searchText)
-            characters = response.results
+            characters = response.characters
             notFound = false
             loading = false
         } catch {

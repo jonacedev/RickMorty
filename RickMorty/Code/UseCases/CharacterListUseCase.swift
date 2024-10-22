@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CharacterListUseCaseProtocol {
-    func fetchCharacters(page: Int) async throws -> CharactersResponse?
+    func fetchCharacters(page: Int) async throws -> CharactersResponse
     func searchCharacters(text: String) async throws -> CharactersResponse
 }
 
@@ -16,21 +16,21 @@ class CharacterListUseCase {
     
     // MARK: - Properties
     
-    private var apiClient: APIClientProtocol
+    private var repository: CharacterRepositoryProtocol
     
     // MARK: - Object Lifecycle
     
-    init(apiClient: APIClientProtocol) {
-        self.apiClient = apiClient
+    init(repository: CharacterRepositoryProtocol) {
+        self.repository = repository
     }
 }
 
 extension CharacterListUseCase: CharacterListUseCaseProtocol {
-    func fetchCharacters(page: Int) async throws -> CharactersResponse? {
-        try await apiClient.fetchCharacters(page: page)
+    func fetchCharacters(page: Int) async throws -> CharactersResponse {
+        try await repository.fetchCharacters(page: page)
     }
     
     func searchCharacters(text: String) async throws -> CharactersResponse {
-        return try await apiClient.searchCharacters(text: text)
+        try await repository.searchCharacters(text: text)
     }
 }

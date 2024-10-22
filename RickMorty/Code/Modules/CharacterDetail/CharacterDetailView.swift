@@ -42,7 +42,7 @@ struct CharacterDetailView: View {
     }
     
     @ViewBuilder private func vwImage() -> some View {
-        WebImage(url: URL(string: model.image ?? ""), options: .retryFailed) { image in
+        WebImage(url: URL(string: model.imageURL ?? ""), options: .retryFailed) { image in
             image.resizable()
         } placeholder: {
             Rectangle().foregroundColor(.gray)
@@ -63,7 +63,7 @@ struct CharacterDetailView: View {
     @ViewBuilder private func vwInfoChips() -> some View {
         HStack {
             // Gender
-            Label(model.gender.rawValue.capitalized, systemImage: "person")
+            Label(model.gender?.rawValue.capitalized ?? "", systemImage: "person")
                 .padding(8)
                 .fontWeight(.semibold)
                 .background(Color.blue.opacity(0.7))
@@ -79,7 +79,7 @@ struct CharacterDetailView: View {
                 .cornerRadius(10)
             
             // Specie
-            Text(model.species ?? "character_unknown_placeholder".localized)
+            Text(model.specie ?? "character_unknown_placeholder".localized)
                 .padding(8)
                 .fontWeight(.semibold)
                 .background(Color.gray.opacity(0.7))
@@ -107,13 +107,13 @@ struct CharacterDetailView: View {
     }
     
     @ViewBuilder private func vwInfoEpisodes() -> some View {
-        Text(String(format: NSLocalizedString("character_episodes_title", comment: ""), model.episode?.count ?? 0))
+        Text(String(format: NSLocalizedString("character_episodes_title", comment: ""), model.episodes?.count ?? 0))
             .font(.headline)
             .frame(maxWidth: .infinity, alignment: .leading)
         
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                ForEach(model.episode ?? [], id: \.self) { episodeUrl in
+                ForEach(model.episodes ?? [], id: \.self) { episodeUrl in
                     Text(episodeUrl.components(separatedBy: "/").last ?? "")
                         .padding(10)
                         .background(Color.cyan.opacity(0.7))

@@ -13,7 +13,7 @@ struct CharacterRow: View {
 
     var body: some View {
         VStack {
-            WebImage(url: URL(string: character.image ?? ""), options: .retryFailed) { image in
+            WebImage(url: URL(string: character.imageURL ?? ""), options: .retryFailed) { image in
                 image.resizable()
             } placeholder: {
                 Rectangle().foregroundColor(.gray)

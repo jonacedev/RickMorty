@@ -8,13 +8,13 @@
 import Foundation
 
 protocol APIClientProtocol {
-    func fetchCharacters(page: Int) async throws -> CharactersResponse
-    func searchCharacters(text: String) async throws -> CharactersResponse
+    func fetchCharacters(page: Int) async throws -> CharactersResponseDTO
+    func searchCharacters(text: String) async throws -> CharactersResponseDTO
 }
 
 class ApiClient: BaseAPIClient, APIClientProtocol {
     
-    func fetchCharacters(page: Int) async throws -> CharactersResponse {
+    func fetchCharacters(page: Int) async throws -> CharactersResponseDTO {
         let requestModel = RequestModel(
             path: .characters,
             method: .get,
@@ -22,7 +22,7 @@ class ApiClient: BaseAPIClient, APIClientProtocol {
         )
         
         do {
-            let response: CharactersResponse? = try await self.request(requestModel: requestModel)
+            let response: CharactersResponseDTO? = try await self.request(requestModel: requestModel)
             guard let response else { throw BaseError.generic }
             return response
             
@@ -31,7 +31,7 @@ class ApiClient: BaseAPIClient, APIClientProtocol {
         }
     }
     
-    func searchCharacters(text: String) async throws -> CharactersResponse {
+    func searchCharacters(text: String) async throws -> CharactersResponseDTO {
         let requestModel = RequestModel(
             path: .characters,
             method: .get,
@@ -39,7 +39,7 @@ class ApiClient: BaseAPIClient, APIClientProtocol {
         )
         
         do {
-            let response: CharactersResponse? = try await self.request(requestModel: requestModel)
+            let response: CharactersResponseDTO? = try await self.request(requestModel: requestModel)
             guard let response else { throw BaseError.generic }
             return response
             

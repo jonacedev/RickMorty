@@ -57,11 +57,6 @@
 			path = RickMortyTests;
 			sourceTree = "<group>";
 		};
-		AB6802DD2CC317A100ACD8AE /* RickMortyUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RickMortyUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +90,6 @@
 			children = (
 				AB6802C22CC317A000ACD8AE /* RickMorty */,
 				AB6802D32CC317A100ACD8AE /* RickMortyTests */,
-				AB6802DD2CC317A100ACD8AE /* RickMortyUITests */,
 				AB6802C12CC317A000ACD8AE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -171,9 +165,6 @@
 			);
 			dependencies = (
 				AB6802DC2CC317A100ACD8AE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				AB6802DD2CC317A100ACD8AE /* RickMortyUITests */,
 			);
 			name = RickMortyUITests;
 			packageProductDependencies = (

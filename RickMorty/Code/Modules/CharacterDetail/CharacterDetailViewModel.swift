@@ -8,6 +8,4 @@
 import SwiftUI
 
 @Observable
-class CharacterDetailViewModel: BaseViewModel {
-    
-}
+class CharacterDetailViewModel: BaseViewModel { }
