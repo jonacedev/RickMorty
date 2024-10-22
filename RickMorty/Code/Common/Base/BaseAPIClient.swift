@@ -25,7 +25,7 @@ class BaseAPIClient {
 
     // MARK: - Public method
         
-    func request<T: Decodable>(requestModel: RequestModel) async throws -> T? {
+    func request<T: Decodable>(requestModel: RequestModel) async throws -> T {
         
         var model = requestModel
         model.headers = addCustomHeaders(model.headers)

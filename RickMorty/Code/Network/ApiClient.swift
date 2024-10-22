@@ -21,14 +21,7 @@ class ApiClient: BaseAPIClient, APIClientProtocol {
             queryParameters: ["page": String(page)]
         )
         
-        do {
-            let response: CharactersResponseDTO? = try await self.request(requestModel: requestModel)
-            guard let response else { throw BaseError.generic }
-            return response
-            
-        } catch {
-            throw error
-        }
+        return try await self.request(requestModel: requestModel)
     }
     
     func searchCharacters(text: String) async throws -> CharactersResponseDTO {
@@ -38,14 +31,7 @@ class ApiClient: BaseAPIClient, APIClientProtocol {
             queryParameters: ["name": text]
         )
         
-        do {
-            let response: CharactersResponseDTO? = try await self.request(requestModel: requestModel)
-            guard let response else { throw BaseError.generic }
-            return response
-            
-        } catch {
-            throw error
-        }
+        return try await self.request(requestModel: requestModel)
     }
     
 }
