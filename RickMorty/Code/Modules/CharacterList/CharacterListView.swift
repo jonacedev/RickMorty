@@ -55,7 +55,7 @@ struct CharacterListView: View {
     
     @ViewBuilder private func vwCharactersGrid() -> some View {
         LazyVGrid(columns: columns, spacing: 16) {
-            ForEach(vm.characters, id: \.self) { character in
+            ForEach(vm.characters, id: \.id) { character in
                 NavigationLink(destination: destinationView(for: character)) {
                     characterRow(for: character)
                 }

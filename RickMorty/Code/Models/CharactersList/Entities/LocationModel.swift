@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LocationModel: Codable, Hashable {
+struct LocationModel: Codable {
     let name: String?
     let url: String?
 }

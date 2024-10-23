@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OriginModel: Codable, Hashable {
+struct OriginModel: Codable {
     let name: String?
     let url: String?
 }
